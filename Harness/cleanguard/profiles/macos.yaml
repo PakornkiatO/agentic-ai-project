@@ -1,0 +1,17 @@
+name: macos
+case_sensitive: false
+protected:
+  - "/System/**"
+  - "/Applications/**"
+  - "/Library/**"
+  - "~/Library/**"
+  - "**/.git/**"
+  - "**/*.app/**"         # app bundles are folders; never look inside
+sync_roots:
+  - "~/Library/Mobile Documents/**"      # iCloud Drive
+  - "~/Library/CloudStorage/**"
+junk_names:
+  - ".DS_Store"
+  - "._*"                 # AppleDouble files on non-HFS volumes
+partial_download_ext: [".crdownload", ".part", ".download"]
+quarantine_dir: "~/Library/Application Support/CleanGuard/quarantine"

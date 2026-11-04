@@ -1,0 +1,17 @@
+name: windows
+case_sensitive: false
+protected:
+  - "C:/Windows/**"
+  - "C:/Program Files/**"
+  - "C:/Program Files (x86)/**"
+  - "C:/ProgramData/**"
+  - "%APPDATA%/**"
+  - "%LOCALAPPDATA%/**"
+  - "**/.git/**"
+sync_roots:
+  - "%USERPROFILE%/OneDrive*/**"
+junk_names:
+  - "Thumbs.db"
+  - "~$*"                 # Office lock files (age rule applies)
+partial_download_ext: [".crdownload", ".part", ".tmp", ".partial"]
+quarantine_dir: "%LOCALAPPDATA%/CleanGuard/quarantine"

@@ -1,0 +1,20 @@
+name: linux
+case_sensitive: true
+protected:
+  - "/usr/**"
+  - "/etc/**"
+  - "/bin/**"
+  - "/var/**"
+  - "~/.config/**"
+  - "~/.local/**"
+  - "~/.ssh/**"
+  - "~/.gnupg/**"
+  - "**/.git/**"
+sync_roots:
+  - "~/Dropbox/**"
+  - "~/Nextcloud/**"
+junk_names:
+  - "*~"
+  - ".~lock.*#"           # LibreOffice lock files (age rule applies)
+partial_download_ext: [".crdownload", ".part"]
+quarantine_dir: "~/.local/share/CleanGuard/quarantine"

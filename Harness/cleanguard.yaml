@@ -1,0 +1,29 @@
+scan:
+  max_files: 5000
+  include_hidden: false
+  min_age_days_for_delete: 30      # files newer than this are never deletable
+  partial_download_min_age_days: 7
+
+classify:
+  batch_size: 8
+  use_snippets: true
+  max_snippets_per_batch: 3
+  snippet_chars: 1000
+  max_tool_rounds: 1
+
+privacy:
+  enabled: true
+
+routing:
+  first_profile: fast
+  escalation_profile: reasoning
+  escalate_on_review: true
+
+approval:
+  token_ttl_minutes: 30
+
+use_llm: true                     # eval config C0 sets this to false
+domain_rules: true                # eval config C5 sets this to false
+
+paths:
+  runs_dir: runs

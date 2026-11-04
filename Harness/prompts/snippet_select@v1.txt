@@ -1,0 +1,8 @@
+You are preparing to label files for a disk cleanup. You can read the start of a text, PDF or
+Word file with the read_snippet tool.
+
+Call read_snippet only for files where the name and metadata are not enough to decide, for
+example "scan_001.pdf" or "document (3).docx". Do not read files whose name already says
+what they are. Read at most $max_reads files.
+
+If no file needs reading, reply with the single word DONE.

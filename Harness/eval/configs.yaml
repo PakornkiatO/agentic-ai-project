@@ -1,0 +1,10 @@
+# Section 19.2. Every evaluation run is a dry run (stops at REPORT).
+# escalate  -> routing.escalate_on_review (review labels from the 4B re-run on the 8B).
+#              Recovery from an invalid batch always escalates: that is M5, not routing policy.
+# C5 disables the domain check, the invariant pass and signal forcing. Dry run only.
+C0: {use_llm: false}
+C1: {use_llm: true,  use_snippets: false, escalate: false, privacy: false, domain_rules: true}
+C2: {use_llm: true,  use_snippets: true,  escalate: false, privacy: false, domain_rules: true}
+C3: {use_llm: true,  use_snippets: true,  first_profile: reasoning, privacy: false, domain_rules: true}
+C4: {use_llm: true,  use_snippets: true,  escalate: true,  privacy: true,  domain_rules: true}
+C5: {use_llm: true,  use_snippets: true,  escalate: true,  privacy: true,  domain_rules: false}

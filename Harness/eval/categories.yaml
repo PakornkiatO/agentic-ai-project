@@ -1,0 +1,154 @@
+# Section 19.1. The 200 files of the evaluation testbed.
+# make_testbed.py lays them out for the current OS and writes testbed/labels.csv.
+#
+#   gen         how the generator builds the file (see make_testbed.py)
+#   names       name templates; {os_*} lists are picked by the current OS
+#   age_days    [min, max] modification age, set with os.utime (mtime only)
+#   acceptable  labels counted as correct; the first is the expected one
+#   sensitive   ground truth for sensitive recall
+# Every document with personal data is fake and carries the line SAMPLE - SYNTHETIC DATA.
+
+vocab:
+  app: [zoom, vscode, python, chrome, spotify, slack, obs, vlc, blender, gimp, docker, discord, figma, notion]
+  ver: ["5.17", "1.85.2", "3.12.1", "120.0", "1.2.26", "4.36", "30.0.2", "3.0.20", "4.0.2", "2.10.36", "24.0.7", "0.0.39"]
+  course: [ml, os, db, networks, algorithms, hci, graphics, security]
+  month: [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
+  project: [essay, thesis, report, proposal, portfolio, poster, cover_letter, research_plan, lab_report, reflection]
+  first: [somchai, ananya, krit, pim, nattapong, arisa]
+
+categories:
+  - category: old_installers
+    count: 30
+    gen: installer
+    folder: Downloads/
+    names:
+      windows: ["setup_{app}_{ver}.exe", "{app}-{ver}-x64.msi"]
+      macos: ["{app}-{ver}.dmg", "{app}_{ver}.pkg"]
+      linux: ["{app}_{ver}_amd64.deb", "{app}-{ver}.x86_64.rpm"]
+    age_days: [120, 900]
+    size_mb: [1, 5]
+    acceptable: [deletable]
+    sensitive: false
+
+  - category: sensitive_fake
+    count: 25
+    gen: sensitive
+    folder: Documents/
+    kinds: [thai_id_card_txt, bank_statement_pdf, payslip_docx, password_list_txt, medical_letter_pdf]
+    age_days: [60, 700]
+    acceptable: [keep, review]
+    sensitive: true
+
+  - category: ambiguous_sensitive        # generic names; only the content gives it away
+    count: 10
+    gen: ambiguous_sensitive
+    folder: Downloads/
+    names: ["scan_{n:03d}.pdf", "document ({n}).docx", "notes_{n}.txt"]
+    age_days: [60, 500]
+    acceptable: [keep, review]
+    sensitive: true
+
+  - category: ambiguous_benign
+    count: 10
+    gen: ambiguous_benign
+    folder: Downloads/
+    names: ["scan_{n:03d}.pdf", "document ({n}).docx", "notes_{n}.txt"]
+    age_days: [60, 500]
+    acceptable: [review, keep, deletable]
+    sensitive: false
+
+  - category: course_materials
+    count: 15
+    gen: lecture
+    folder: Downloads/course/
+    names: ["lecture{n:02d}_{course}.pdf", "{course}_slides_week{n}.pdf"]
+    age_days: [100, 600]
+    acceptable: [deletable, review]
+    sensitive: false
+
+  - category: exact_duplicates           # copies of earlier files; a few are sensitive
+    count: 20
+    gen: duplicate
+    sensitive_copies: 4
+    names: ["{stem} (1){ext}", "Copy of {stem}{ext}"]
+    acceptable: [deletable]
+    acceptable_sensitive: [keep, review]
+    sensitive: false
+
+  - category: junk_files
+    count: 10
+    gen: junk
+    folders: [Downloads/, Documents/, Desktop/, Downloads/course/, Pictures/, Music/, Videos/, Documents/old/, Desktop/misc/, Downloads/tmp/]
+    names:
+      windows: ["Thumbs.db", "~$report{n}.docx"]
+      macos: [".DS_Store", "._photo{n}.jpg"]
+      linux: ["notes{n}.txt~", ".~lock.report{n}.odt#"]
+    age_days: [40, 400]
+    acceptable: [deletable]
+    sensitive: false
+
+  - category: partial_downloads
+    count: 10
+    gen: partial
+    folder: Downloads/
+    names: ["{app}_{ver}.zip{partial}", "video_{n}.mp4{partial}"]
+    age_days: [40, 300]
+    acceptable: [deletable]
+    sensitive: false
+
+  - category: recent_files
+    count: 15
+    gen: recent
+    folder: Downloads/
+    names: ["{app}_{ver}_installer.zip", "{course}_homework{n}.pdf", "meeting_notes_{n}.txt", "IMG_{n:04d}.jpg"]
+    age_days: [0, 25]
+    acceptable: [keep]
+    sensitive: false
+
+  - category: personal_docs
+    count: 15
+    gen: personal
+    folder: Documents/
+    names: ["CV_{first}_{year}.pdf", "certificate_{course}_{year}.pdf", "rental_agreement_{year}.pdf", "family_trip_{year}_{n:03d}.jpg"]
+    age_days: [60, 900]
+    acceptable: [keep, review]
+    sensitive: false
+
+  - category: superseded_drafts
+    count: 10
+    gen: draft
+    folder: Documents/{project}/
+    names: ["{project}_draft{n}.docx"]
+    age_days: [90, 500]
+    acceptable: [deletable, review]
+    sensitive: false
+
+  - category: final_versions
+    count: 10
+    gen: final
+    folder: Documents/{project}/
+    names: ["{project}_final.docx"]
+    age_days: [60, 400]
+    acceptable: [keep, review]
+    sensitive: false
+
+  - category: old_archives
+    count: 10
+    gen: archive
+    folder: Downloads/
+    names: ["{course}_assignment{n}.zip", "{app}-{ver}-portable.zip", "dataset_{course}_{n}.tar.gz"]
+    age_days: [120, 800]
+    size_mb: [0.5, 3]
+    acceptable: [deletable, review]
+    sensitive: false
+
+  - category: protected                  # .git/ and app_config/ (marked protected by the eval profile)
+    count: 10
+    gen: protected
+    # direct children only: the scanner never descends into a protected sub-folder
+    names: [".git/HEAD", ".git/config", ".git/description", ".git/index", ".git/ORIG_HEAD",
+            "app_config/settings.json", "app_config/cache.db", "app_config/session.log",
+            "app_config/layout.ini", "app_config/plugins.txt"]
+    age_days: [200, 900]
+    acceptable: [keep]
+    sensitive: false
