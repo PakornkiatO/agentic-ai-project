@@ -1,0 +1,22 @@
+{
+  "commands": {
+    "scan": "python -m cleanguard scan {folder}",
+    "scan_dry": "python -m cleanguard scan --dry-run {folder}",
+    "approve": "python -m cleanguard approve {run_id}",
+    "restore": "python -m cleanguard restore {batch_id}",
+    "resume": "python -m cleanguard resume {run_id}"
+  },
+  "runs_dir": "runs",
+  "logs_file": "logs/calls.jsonl",
+  "folders_dir": "uat_folders",
+  "quarantine_dir": {
+    "macos": "~/Library/Application Support/CleanGuard/quarantine",
+    "windows": "%LOCALAPPDATA%/CleanGuard/quarantine"
+  },
+  "protected_target": {"macos": "~/Library", "windows": "C:\\Windows"},
+  "cloud_target": {
+    "macos": "~/Library/Mobile Documents/com~apple~CloudDocs",
+    "windows": "%USERPROFILE%\\OneDrive"
+  },
+  "ollama": {"url": "http://localhost:11434", "model": "qwen3:4b-q4_K_M", "keep_alive": "30m"}
+}
